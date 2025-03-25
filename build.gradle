@@ -28,9 +28,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// postgre 연결
+	implementation 'org.postgresql:postgresql:42.7.3'
+	runtimeOnly 'org.postgresql:postgresql'
+	// validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//
+	implementation 'org.springframework.security:spring-security-crypto:5.7.1'
 }
 
 tasks.named('test') {
