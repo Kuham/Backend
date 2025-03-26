@@ -1,1 +1,8 @@
 spring.application.name=kuham
+//데이터베이스 설정
+spring.datasource.url = jdbc:postgresql://localhost:5432/{DB 명}
+spring.datasource.username = {DB 유저 이름}
+spring.datasource.password= {DB 비밀번호}
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
