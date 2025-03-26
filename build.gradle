@@ -38,7 +38,7 @@ dependencies {
 	// validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	//
-	implementation 'org.springframework.security:spring-security-crypto:5.7.1'
+	implementation 'org.springframework.security:spring-security-crypto:6.4.4'
 }
 
 tasks.named('test') {
