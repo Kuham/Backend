@@ -1,5 +1,6 @@
 package kookmin.kuham.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kookmin.kuham.user.dto.request.RegisterInfoRequest;
 import kookmin.kuham.user.exception.UserAlreadyExistException;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
 
+    @Operation(summary = "회원가입",description = "회원가입을 진행합니다")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterInfoRequest registerInfoRequest) {
         boolean registerResult = userService.register(registerInfoRequest);
@@ -25,4 +26,7 @@ public class UserController {
         }
         return ResponseEntity.ok().build();
     }
+
+    private final UserService userService;
+
 }
