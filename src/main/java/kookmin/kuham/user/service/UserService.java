@@ -1,6 +1,8 @@
 package kookmin.kuham.user.service;
 
 import kookmin.kuham.user.dto.request.RegisterInfoRequest;
+import kookmin.kuham.user.exception.LoginFailedException;
+import kookmin.kuham.user.exception.UserNotExistException;
 import kookmin.kuham.user.repository.UserRepository;
 import kookmin.kuham.user.schema.User;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +36,19 @@ public class UserService {
                 .build();
         userRepository.save(newUser);
         return true;
+    }
+
+    public void login(String email,String password){
+        if (!userRepository.existsByEmail(email)){
+            throw new UserNotExistException();
+        }
+        User user = userRepository.findByEmail(email);
+        if (passwordEncoder.matches(password,user.getPassword())){
+            //TODO: 로그인 후 인증 인가 추가
+            return;
+        }else {
+            throw new LoginFailedException();
+        }
+
     }
 }
