@@ -1,18 +1,29 @@
 package kookmin.kuham.portfolio.schema;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import kookmin.kuham.user.schema.User;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "portfolio")
 public class Portfolio {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String email;
-    private String job;
-    private String personality;
+    private String profileUrl;
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> stacks;
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> interests;
+    private String introduce;
 
     @OneToOne(mappedBy = "portfolio")
     private User user;

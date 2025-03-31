@@ -18,7 +18,7 @@ public class User {
     private String name;
     private String email;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
