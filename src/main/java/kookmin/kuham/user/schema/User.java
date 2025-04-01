@@ -14,9 +14,12 @@ import lombok.*;
 public class User {
     @Id
     private String id;
-    private String password;
+    private String profileUrl;
     private String name;
     private String email;
+    private String studentNumber;
+    private String grade;
+    private String major;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "portfolio_id")

@@ -22,7 +22,7 @@ public class Portfolio {
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> stacks;
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<String> interests;
+    private List<String> links;
     private String introduce;
 
     @OneToOne(mappedBy = "portfolio")

@@ -6,3 +6,8 @@ spring.datasource.password= {DB 비밀번호}
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=update
+
+//구글 로그인
+google.client.id={구글 클라이언트 아이디}
+google.client.secret={구글 클라이언트 비밀키}
+google.client.redirect-uri={구글 클라이언트 redirect_uri}

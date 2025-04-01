@@ -18,10 +18,4 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
-    @PostMapping("/add")
-    @Operation(summary = "포트폴리오 등록",description = "포트폴리오 등록 api")
-    public ResponseEntity<?> add(@RequestBody @Valid AddPortfolioRequest addPortfolioRequest){
-        portfolioService.addPortfolio(addPortfolioRequest);
-        return ResponseEntity.ok().build();
-    }
 }

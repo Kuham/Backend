@@ -1,39 +1,50 @@
 package kookmin.kuham.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
-import kookmin.kuham.user.dto.request.LoginInfoRequest;
+import io.swagger.v3.oas.annotations.Parameter;
 import kookmin.kuham.user.dto.request.RegisterInfoRequest;
-import kookmin.kuham.user.exception.UserAlreadyExistException;
+import kookmin.kuham.user.dto.response.RegisterSuccessResponse;
+import kookmin.kuham.user.dto.response.UserRegisterResponse;
 import kookmin.kuham.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
+    @Value("${google.client.id}")
+    private String googleClientId;
+
     @Operation(summary = "회원가입",description = "회원가입을 진행합니다")
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegisterInfoRequest registerInfoRequest) {
-        boolean registerResult = userService.register(registerInfoRequest);
-        if (!registerResult) {
-            throw new UserAlreadyExistException();
-        }
-        return ResponseEntity.ok().build();
+    @ResponseBody
+    public ResponseEntity<RegisterSuccessResponse> register(@RequestBody RegisterInfoRequest registerInfoRequest) {
+        return ResponseEntity.ok(userService.register(registerInfoRequest));
+
+    }
+
+
+    @GetMapping("/google/login")
+    public String googleLogin() {
+        String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
+                + "&redirect_uri=http://localhost:8080/auth/login&response_type=code&scope=email%20profile%20openid&access_type=offline";
+
+        return "redirect:" + reqUrl;
     }
 
     @Operation(summary = "로그인",description = "로그인을 진행합니다")
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginInfoRequest loginInfoRequest){
-        userService.login(loginInfoRequest.email(),loginInfoRequest.password());
-        return ResponseEntity.ok().build();
+    @Parameter(name = "code", description = "구글 로그인 후 받은 코드")
+    @ResponseBody
+    @GetMapping("/login")
+    public UserRegisterResponse login(@RequestParam("code") String code){
+        String accessToken = userService.requestAccessToken(code);
+         return userService.getUserInfo(accessToken);
     }
 
 
