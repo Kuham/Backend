@@ -109,5 +109,19 @@ public class UserService {
         }
     }
 
+    public void updateUserInfo(RegisterInfoRequest registerInfoRequest) {
+        User user = userRepository.findByEmail(registerInfoRequest.email());
+        if (user == null) {
+            throw new UserNotExistException();
+        }
+        user.setName(registerInfoRequest.name());
+        user.setProfileUrl(registerInfoRequest.profileUrl());
+        user.setStudentNumber(registerInfoRequest.studentNum());
+        user.setGrade(registerInfoRequest.grade());
+        user.setMajor(registerInfoRequest.major());
+
+        userRepository.save(user);
+    }
+
 
 }

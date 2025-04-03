@@ -43,7 +43,8 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0' // Swagger
 	// Webclient
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
+	// https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+	implementation("com.google.firebase:firebase-admin:9.4.3")
 }
 
 tasks.named('test') {

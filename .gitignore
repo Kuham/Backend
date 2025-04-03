@@ -25,6 +25,8 @@ bin/
 *.ipr
 out/
 src/main/resources/application.properties
+# Firebase Admin SDK JSON 파일
+src/main/resources/kuham-4b299-firebase-adminsdk-fbsvc-0e1c216ac5.json
 !**/src/main/**/out/
 !**/src/test/**/out/
 

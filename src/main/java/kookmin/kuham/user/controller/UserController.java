@@ -38,13 +38,20 @@ public class UserController {
         return "redirect:" + reqUrl;
     }
 
-    @Operation(summary = "로그인",description = "로그인을 진행합니다")
+    @Operation(summary = "로그인",description = "로그인 api")
     @Parameter(name = "code", description = "구글 로그인 후 받은 코드")
     @ResponseBody
     @GetMapping("/login")
     public UserRegisterResponse login(@RequestParam("code") String code){
         String accessToken = userService.requestAccessToken(code);
          return userService.getUserInfo(accessToken);
+    }
+
+    @Operation(summary = "회원 정보 수정",description = "회원 정보 수정 api")
+    @PutMapping("/edit")
+    public ResponseEntity<String> updateUserInfo(@RequestBody RegisterInfoRequest registerInfoRequest) {
+        userService.updateUserInfo(registerInfoRequest);
+        return ResponseEntity.ok("회원 정보 수정 완료");
     }
 
 
