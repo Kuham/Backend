@@ -2,11 +2,11 @@ package kookmin.kuham.user.service;
 
 import kookmin.kuham.portfolio.schema.Portfolio;
 import kookmin.kuham.portfolio.service.PortfolioService;
+import kookmin.kuham.user.dto.request.EditUserRequest;
 import kookmin.kuham.user.dto.request.GoogleUserInfo;
 import kookmin.kuham.user.dto.request.RegisterInfoRequest;
 import kookmin.kuham.user.dto.response.RegisterSuccessResponse;
 import kookmin.kuham.user.dto.response.UserRegisterResponse;
-import kookmin.kuham.user.exception.LoginFailedException;
 import kookmin.kuham.user.exception.UserNotExistException;
 import kookmin.kuham.user.repository.UserRepository;
 import kookmin.kuham.user.schema.User;
@@ -14,11 +14,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -109,19 +111,37 @@ public class UserService {
         }
     }
 
-    public void updateUserInfo(RegisterInfoRequest registerInfoRequest) {
-        User user = userRepository.findByEmail(registerInfoRequest.email());
-        if (user == null) {
-            throw new UserNotExistException();
+    public void updateUserInfo(EditUserRequest editUserRequest, MultipartFile file) throws IOException {
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "49d2c0a5-b081-4eeb-8e71-cdba12a6b3cc";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        // 업로드할 경로 설정
+        String rootPath = System.getProperty("user.dir"); // 예: C:/Users/moong/Backend
+        String uploadDir = rootPath + File.separator + "uploads" + File.separator + "profile" + File.separator + userId;
+
+        if(file != null && !file.isEmpty()){
+            File dir = new File(uploadDir);
+            // 기존 파일 삭제
+            if (dir.exists()){
+                File[] files = dir.listFiles();
+                if (files != null) {
+                    for (File f : files) {
+                        f.delete();
+                    }
+                }
+            }else dir.mkdirs();
+            //이미지 업로드
+            String fileName = file.getOriginalFilename();
+            file.transferTo(new File(uploadDir , fileName));
+            user.setProfileUrl("http://localhost:8080/profile/"+userId+"/"+fileName);
         }
-        user.setName(registerInfoRequest.name());
-        user.setProfileUrl(registerInfoRequest.profileUrl());
-        user.setStudentNumber(registerInfoRequest.studentNum());
-        user.setGrade(registerInfoRequest.grade());
-        user.setMajor(registerInfoRequest.major());
+
+
+        user.setName(editUserRequest.name());
+        user.setStudentNumber(editUserRequest.studentNumber());
+        user.setGrade(editUserRequest.grade());
+        user.setMajor(editUserRequest.major());
 
         userRepository.save(user);
     }
-
-
 }

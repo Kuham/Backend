@@ -5,6 +5,6 @@ import org.springframework.http.HttpStatus;
 
 public class UserNotExistException extends ApiException {
     public UserNotExistException(){
-        super(HttpStatus.BAD_REQUEST,"해당 이메일을 가진 유저가 없습니다");
+        super(HttpStatus.BAD_REQUEST,"유저 데이터가 없습니다.");
     }
 }

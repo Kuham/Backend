@@ -2,6 +2,7 @@ package kookmin.kuham.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import kookmin.kuham.user.dto.request.EditUserRequest;
 import kookmin.kuham.user.dto.request.RegisterInfoRequest;
 import kookmin.kuham.user.dto.response.RegisterSuccessResponse;
 import kookmin.kuham.user.dto.response.UserRegisterResponse;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/auth")
@@ -49,8 +53,9 @@ public class UserController {
 
     @Operation(summary = "회원 정보 수정",description = "회원 정보 수정 api")
     @PutMapping("/edit")
-    public ResponseEntity<String> updateUserInfo(@RequestBody RegisterInfoRequest registerInfoRequest) {
-        userService.updateUserInfo(registerInfoRequest);
+    public ResponseEntity<String> updateUserInfo(@ModelAttribute EditUserRequest editUserRequest, @RequestPart("file")MultipartFile file) throws IOException {
+
+        userService.updateUserInfo(editUserRequest,file);
         return ResponseEntity.ok("회원 정보 수정 완료");
     }
 
