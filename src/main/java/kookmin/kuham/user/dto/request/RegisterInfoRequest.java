@@ -43,6 +43,10 @@ public record RegisterInfoRequest(
         List<String> links,
 
         @Nullable
+        @Schema(name = "charaters",description = "성격 (리스트 형식)")
+        List<String> characters,
+
+        @Nullable
         @Schema(name = "introduce",description = "자기소개")
         String introduce
 

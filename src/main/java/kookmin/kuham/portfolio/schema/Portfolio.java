@@ -16,13 +16,12 @@ public class Portfolio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
-    private String email;
-    private String profileUrl;
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> stacks;
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> links;
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> characters;
     private String introduce;
 
     @OneToOne(mappedBy = "portfolio")
