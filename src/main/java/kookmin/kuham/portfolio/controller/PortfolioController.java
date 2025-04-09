@@ -30,4 +30,11 @@ public class PortfolioController {
         return ResponseEntity.ok("프로젝트 추가 완료");
     }
 
+        @Operation(summary = "프로젝트 수정")
+        @PutMapping("/project/{projectId}/edit")
+        public ResponseEntity<String> editProject(@Valid @RequestBody SaveProjectRequest SaveProjectRequest, @PathVariable("projectId")Long projectId) {
+            portfolioService.editProject(SaveProjectRequest,projectId);
+            return ResponseEntity.ok("프로젝트 수정 완료");
+        }
+
 }
