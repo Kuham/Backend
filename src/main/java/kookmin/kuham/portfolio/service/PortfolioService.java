@@ -1,10 +1,12 @@
 package kookmin.kuham.portfolio.service;
 
 import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
+import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.portfolio.exception.ProjectNotFoundException;
 import kookmin.kuham.portfolio.repository.PortfolioRepository;
+import kookmin.kuham.portfolio.schema.License;
 import kookmin.kuham.portfolio.schema.Portfolio;
 import kookmin.kuham.portfolio.schema.Project;
 import kookmin.kuham.user.dto.request.RegisterInfoRequest;
@@ -69,8 +71,26 @@ public class PortfolioService {
                         .portfolio(portfolio)
                 .build());
         portfolioRepository.save(portfolio);
+    }
+
+    public void addLicense(SaveLicenseRequest saveLicenseRequest){
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
+        portfolio.getLicenses().add(License.builder()
+                        .licenseName(saveLicenseRequest.licenseName())
+                        .licenseOrganization(saveLicenseRequest.licenseOraganization())
+                        .licenseDate(saveLicenseRequest.licenseDate())
+                        .portfolio(portfolio)
+                .build());
+        portfolioRepository.save(portfolio);
 
     }
+
 
     public void editProject(SaveProjectRequest saveProjectRequest,Long projectId){
         //TODO: authentication에서 userId를 가져오도록 수정

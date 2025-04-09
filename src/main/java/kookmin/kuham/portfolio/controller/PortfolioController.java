@@ -3,6 +3,7 @@ package kookmin.kuham.portfolio.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
+import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
 import kookmin.kuham.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,13 @@ public class PortfolioController {
     public ResponseEntity<String> addProject(@Valid @RequestBody SaveProjectRequest SaveProjectRequest) {
         portfolioService.addProject(SaveProjectRequest);
         return ResponseEntity.ok("프로젝트 추가 완료");
+    }
+
+    @Operation(summary = "자격증 추가")
+    @PostMapping("/license/add")
+    public ResponseEntity<?> addLicense(@Valid @RequestBody SaveLicenseRequest saveLicenseRequest){
+        portfolioService.addLicense(saveLicenseRequest);
+        return ResponseEntity.ok("자격증 추가 완료");
     }
 
     @Operation(summary = "프로젝트 수정")
