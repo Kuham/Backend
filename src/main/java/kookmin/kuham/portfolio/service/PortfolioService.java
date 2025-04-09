@@ -1,7 +1,7 @@
 package kookmin.kuham.portfolio.service;
 
 import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
-import kookmin.kuham.portfolio.dto.request.addProjectRequest;
+import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.portfolio.repository.PortfolioRepository;
 import kookmin.kuham.portfolio.schema.Portfolio;
@@ -49,7 +49,7 @@ public class PortfolioService {
         userRepository.save(user);
     }
 
-    public void addProject(addProjectRequest addProjectRequest){
+    public void addProject(SaveProjectRequest SaveProjectRequest){
         //TODO: authentication에서 userId를 가져오도록 수정
         String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
@@ -59,12 +59,12 @@ public class PortfolioService {
         }
 
         portfolio.getProjects().add(Project.builder()
-                        .title(addProjectRequest.projectName())
-                        .stacks(addProjectRequest.stacks())
-                        .description(addProjectRequest.description())
-                        .startDate(addProjectRequest.startDate())
-                        .endDate(addProjectRequest.endDate())
-                        .inProgress(addProjectRequest.inProgress())
+                        .title(SaveProjectRequest.projectName())
+                        .stacks(SaveProjectRequest.stacks())
+                        .description(SaveProjectRequest.description())
+                        .startDate(SaveProjectRequest.startDate())
+                        .endDate(SaveProjectRequest.endDate())
+                        .inProgress(SaveProjectRequest.inProgress())
                         .portfolio(portfolio)
                 .build());
         portfolioRepository.save(portfolio);

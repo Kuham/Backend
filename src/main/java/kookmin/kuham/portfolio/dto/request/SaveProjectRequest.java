@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record addProjectRequest(
+public record SaveProjectRequest(
         @NotNull
         @Schema(name = "프로젝트 명", description = "프로젝트 명")
         String projectName,
