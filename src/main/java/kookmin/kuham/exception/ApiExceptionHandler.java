@@ -1,6 +1,7 @@
 package kookmin.kuham.exception;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.portfolio.exception.ProjectNotFoundException;
 import kookmin.kuham.user.exception.LoginFailedException;
@@ -23,6 +24,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<?> loginFailedException(LoginFailedException e){
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
+
     @ExceptionHandler(UserNotExistException.class)
     public ResponseEntity<?> userNotExistException(UserNotExistException e){
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
@@ -32,8 +34,14 @@ public class ApiExceptionHandler {
     public ResponseEntity<?> portfolioNotExistException(PortfolioNotExistException e){
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
+
     @ExceptionHandler(ProjectNotFoundException.class)
     public ResponseEntity<?> projectNotFoundException(ProjectNotFoundException e){
+        return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(LicenseNotFoundException.class)
+    public ResponseEntity<?> licenseNotFoundException(LicenseNotFoundException e){
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
 }

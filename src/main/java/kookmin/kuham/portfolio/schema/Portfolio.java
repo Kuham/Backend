@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kookmin.kuham.user.schema.User;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,8 +29,8 @@ public class Portfolio {
     private User user;
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL,orphanRemoval = true)
-    List<Project> projects;
+    List<Project> projects = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL,orphanRemoval = true)
-    List<License> licenses;
+    List<License> licenses = new ArrayList<>();
 }
