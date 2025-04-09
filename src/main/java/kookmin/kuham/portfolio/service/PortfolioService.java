@@ -96,4 +96,22 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
     }
 
+    public void deleteProject(Long projectId){
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
+
+        Project project = portfolio.getProjects().stream()
+                .filter(p -> p.getId()==projectId)
+                .findFirst()
+                .orElseThrow(ProjectNotFoundException::new);
+
+        portfolio.getProjects().remove(project);
+        portfolioRepository.save(portfolio);
+    }
+
 }
