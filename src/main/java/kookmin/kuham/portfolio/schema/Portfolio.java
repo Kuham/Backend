@@ -26,4 +26,7 @@ public class Portfolio {
 
     @OneToOne(mappedBy = "portfolio")
     private User user;
+
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL,orphanRemoval = true)
+    List<Project> projects;
 }

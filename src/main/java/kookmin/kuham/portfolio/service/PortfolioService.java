@@ -1,7 +1,11 @@
 package kookmin.kuham.portfolio.service;
 
 import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
+import kookmin.kuham.portfolio.dto.request.addProjectRequest;
+import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
+import kookmin.kuham.portfolio.repository.PortfolioRepository;
 import kookmin.kuham.portfolio.schema.Portfolio;
+import kookmin.kuham.portfolio.schema.Project;
 import kookmin.kuham.user.dto.request.RegisterInfoRequest;
 import kookmin.kuham.user.exception.UserNotExistException;
 import kookmin.kuham.user.repository.UserRepository;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PortfolioService {
     private final UserRepository userRepository;
+    private final PortfolioRepository portfolioRepository;
 
     public Portfolio addPortfolio(RegisterInfoRequest registerInfoRequest){
         //입력 받은 정보를 토대로 포트폴리오 객체 생성
@@ -25,19 +30,46 @@ public class PortfolioService {
 
 
     }
-
     public void editPortfolio( EditPortfolioRequest editPortfolioRequest) {
-        //TODO: authentica  tion에서 userId를 가져오도록 수정
+        //TODO: authentication에서 userId를 가져오도록 수정
         String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
 
         portfolio.setStacks(editPortfolioRequest.stacks());
         portfolio.setLinks(editPortfolioRequest.links());
         portfolio.setIntroduce(editPortfolioRequest.introduce());
         portfolio.setCharacters(editPortfolioRequest.characters());
 
+
         user.setPortfolio(portfolio);
         userRepository.save(user);
     }
+
+    public void addProject(addProjectRequest addProjectRequest){
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
+
+        portfolio.getProjects().add(Project.builder()
+                        .title(addProjectRequest.projectName())
+                        .stacks(addProjectRequest.stacks())
+                        .description(addProjectRequest.description())
+                        .startDate(addProjectRequest.startDate())
+                        .endDate(addProjectRequest.endDate())
+                        .inProgress(addProjectRequest.inProgress())
+                        .portfolio(portfolio)
+                .build());
+        portfolioRepository.save(portfolio);
+
+
+    }
+
 }

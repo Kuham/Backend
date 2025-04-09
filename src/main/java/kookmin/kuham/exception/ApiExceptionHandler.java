@@ -1,6 +1,7 @@
 package kookmin.kuham.exception;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.user.exception.LoginFailedException;
 import kookmin.kuham.user.exception.UserAlreadyExistException;
 import kookmin.kuham.user.exception.UserNotExistException;
@@ -23,6 +24,11 @@ public class ApiExceptionHandler {
     }
     @ExceptionHandler(UserNotExistException.class)
     public ResponseEntity<?> userNotExistException(UserNotExistException e){
+        return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(PortfolioNotExistException.class)
+    public ResponseEntity<?> portfolioNotExistException(PortfolioNotExistException e){
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
 }
