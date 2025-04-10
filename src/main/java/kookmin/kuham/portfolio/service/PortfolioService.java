@@ -55,7 +55,7 @@ public class PortfolioService {
         userRepository.save(user);
     }
 
-    public void addProject(SaveProjectRequest SaveProjectRequest){
+    public void addProject(SaveProjectRequest saveProjectRequest){
         //TODO: authentication에서 userId를 가져오도록 수정
         String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
@@ -65,12 +65,13 @@ public class PortfolioService {
         }
 
         portfolio.getProjects().add(Project.builder()
-                        .title(SaveProjectRequest.projectName())
-                        .stacks(SaveProjectRequest.stacks())
-                        .description(SaveProjectRequest.description())
-                        .startDate(SaveProjectRequest.startDate())
-                        .endDate(SaveProjectRequest.endDate())
-                        .inProgress(SaveProjectRequest.inProgress())
+                        .title(saveProjectRequest.projectName())
+                        .stacks(saveProjectRequest.stacks())
+                        .description(saveProjectRequest.description())
+                        .oneLineDescription(saveProjectRequest.oneLineDescription())
+                        .startDate(saveProjectRequest.startDate())
+                        .endDate(saveProjectRequest.endDate())
+                        .inProgress(saveProjectRequest.inProgress())
                         .portfolio(portfolio)
                 .build());
         portfolioRepository.save(portfolio);
@@ -111,6 +112,7 @@ public class PortfolioService {
         project.setTitle(saveProjectRequest.projectName());
         project.setStacks(saveProjectRequest.stacks());
         project.setDescription(saveProjectRequest.description());
+        project.setOneLineDescription(saveProjectRequest.oneLineDescription());
         project.setStartDate(saveProjectRequest.startDate());
         project.setEndDate(saveProjectRequest.endDate());
         project.setInProgress(saveProjectRequest.inProgress());

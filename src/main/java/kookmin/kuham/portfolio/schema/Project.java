@@ -18,6 +18,7 @@ public class Project {
     private long id;
 
     private String title;
+    private String oneLineDescription;
 
     @ElementCollection(fetch = FetchType.LAZY)
     List<String> stacks;

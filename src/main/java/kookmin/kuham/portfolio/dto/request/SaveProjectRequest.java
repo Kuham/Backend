@@ -19,6 +19,10 @@ public record SaveProjectRequest(
         @Nullable
         String description,
 
+        @Schema(description = "한 줄 소개")
+        @Nullable
+        String oneLineDescription,
+
         @Schema(description = "프로젝트 시작일")
         @NotNull
         String startDate,
