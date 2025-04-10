@@ -7,6 +7,7 @@ import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.portfolio.exception.ProjectNotFoundException;
 import kookmin.kuham.portfolio.repository.PortfolioRepository;
+import kookmin.kuham.portfolio.repository.ProjectRepository;
 import kookmin.kuham.portfolio.schema.License;
 import kookmin.kuham.portfolio.schema.Portfolio;
 import kookmin.kuham.portfolio.schema.Project;
@@ -16,7 +17,12 @@ import kookmin.kuham.user.repository.UserRepository;
 import kookmin.kuham.user.schema.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -24,6 +30,7 @@ import java.util.Objects;
 public class PortfolioService {
     private final UserRepository userRepository;
     private final PortfolioRepository portfolioRepository;
+    private final ProjectRepository projectRepository;
 
     public Portfolio addPortfolio(RegisterInfoRequest registerInfoRequest){
         //입력 받은 정보를 토대로 포트폴리오 객체 생성
@@ -55,7 +62,7 @@ public class PortfolioService {
         userRepository.save(user);
     }
 
-    public void addProject(SaveProjectRequest saveProjectRequest){
+    public void addProject(SaveProjectRequest saveProjectRequest, MultipartFile[] images)throws IOException {
         //TODO: authentication에서 userId를 가져오도록 수정
         String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
@@ -63,18 +70,39 @@ public class PortfolioService {
         if (portfolio == null){
             throw new PortfolioNotExistException();
         }
-
-        portfolio.getProjects().add(Project.builder()
-                        .title(saveProjectRequest.projectName())
-                        .stacks(saveProjectRequest.stacks())
-                        .description(saveProjectRequest.description())
-                        .oneLineDescription(saveProjectRequest.oneLineDescription())
-                        .startDate(saveProjectRequest.startDate())
-                        .endDate(saveProjectRequest.endDate())
-                        .inProgress(saveProjectRequest.inProgress())
-                        .portfolio(portfolio)
-                .build());
+        Project newProject = Project.builder()
+                .title(saveProjectRequest.projectName())
+                .stacks(saveProjectRequest.stacks())
+                .description(saveProjectRequest.description())
+                .oneLineDescription(saveProjectRequest.oneLineDescription())
+                .startDate(saveProjectRequest.startDate())
+                .endDate(saveProjectRequest.endDate())
+                .inProgress(saveProjectRequest.inProgress())
+                .portfolio(portfolio)
+                .build();
+        portfolio.getProjects().add(newProject);
+        projectRepository.save(newProject);
         portfolioRepository.save(portfolio);
+
+        if (images != null && images.length > 0) {
+            String uploadDir = System.getProperty("user.dir") + File.separator + "uploads" +
+                    File.separator + "project" + File.separator + newProject.getId();
+
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
+
+            List<String> imageUrls = new ArrayList<>();
+
+            for (int i = 0; i < images.length; i++) {
+                MultipartFile file = images[i];
+                String fileName = i + "_" + file.getOriginalFilename();
+                file.transferTo(new File(uploadDir, fileName));
+                imageUrls.add("http://localhost:8080/project/" + newProject.getId() + "/" + fileName);
+            }
+
+            newProject.setImages(imageUrls);
+            projectRepository.save(newProject); // 다시 저장
+        }
     }
 
     public void addLicense(SaveLicenseRequest saveLicenseRequest){

@@ -9,6 +9,9 @@ import kookmin.kuham.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,8 +29,9 @@ public class PortfolioController {
 
     @Operation(summary = "프로젝트 추가")
     @PostMapping("/project/add")
-    public ResponseEntity<String> addProject(@Valid @RequestBody SaveProjectRequest SaveProjectRequest) {
-        portfolioService.addProject(SaveProjectRequest);
+    public ResponseEntity<String> addProject(@Valid @RequestPart("project") SaveProjectRequest SaveProjectRequest,
+                                             @RequestPart("images") MultipartFile[] images) throws IOException {
+        portfolioService.addProject(SaveProjectRequest, images);
         return ResponseEntity.ok("프로젝트 추가 완료");
     }
 

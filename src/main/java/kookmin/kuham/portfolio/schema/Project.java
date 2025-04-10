@@ -28,6 +28,9 @@ public class Project {
     private String endDate;
     private boolean inProgress;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    List<String> images;
+
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
     Portfolio portfolio;
