@@ -183,19 +183,7 @@ public class PortfolioService {
                 .findFirst()
                 .orElseThrow(ProjectNotFoundException::new);
 
-        String uploadDirPath = System.getProperty("user.dir") + File.separator +
-                "uploads" + File.separator + "project" + File.separator +userId+ File.separator+ project.getId();
-
-        File uploadDir = new File(uploadDirPath);
-        if (uploadDir.exists()) {
-            File[] files = uploadDir.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    file.delete(); // 파일 개별 삭제
-                }
-            }
-            uploadDir.delete(); // 이미지 폴더 자체도 삭제
-        }
+        deleteProjectImage(userId,project.getId());
 
         portfolio.getProjects().remove(project);
         portfolioRepository.save(portfolio);
@@ -217,6 +205,23 @@ public class PortfolioService {
 
         portfolio.getLicenses().remove(license);
         portfolioRepository.save(portfolio);
+    }
+
+
+    public void deleteProjectImage(String userId, Long projectId){
+        String uploadDirPath = System.getProperty("user.dir") + File.separator +
+                "uploads" + File.separator + "project" + File.separator +userId+ File.separator+ projectId;
+
+        File uploadDir = new File(uploadDirPath);
+        if (uploadDir.exists()) {
+            File[] files = uploadDir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    file.delete(); // 파일 개별 삭제
+                }
+            }
+            uploadDir.delete(); // 이미지 폴더 자체도 삭제
+        }
     }
 
 }
