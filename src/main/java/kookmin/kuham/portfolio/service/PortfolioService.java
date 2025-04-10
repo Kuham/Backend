@@ -149,11 +149,29 @@ public class PortfolioService {
         }
 
         Project project = portfolio.getProjects().stream()
-                .filter(p -> p.getId()==projectId)
+                .filter(p -> Objects.equals(p.getId(),projectId))
                 .findFirst()
                 .orElseThrow(ProjectNotFoundException::new);
 
         portfolio.getProjects().remove(project);
+        portfolioRepository.save(portfolio);
+    }
+
+    public void deleteLicense(Long licenseId){
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
+
+        License license = portfolio.getLicenses().stream()
+                .filter(p -> Objects.equals(p.getId(),licenseId))
+                .findFirst()
+                .orElseThrow(LicenseNotFoundException::new);
+
+        portfolio.getLicenses().remove(license);
         portfolioRepository.save(portfolio);
     }
 

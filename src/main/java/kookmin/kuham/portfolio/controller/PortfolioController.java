@@ -59,4 +59,11 @@ public class PortfolioController {
         return ResponseEntity.ok("프로젝트 삭제 완료");
     }
 
+    @Operation
+    @DeleteMapping("/license/{licenseId}/delete")
+    public ResponseEntity<String> deleteLicense(@PathVariable("licenseId") Long licenseId) {
+        portfolioService.deleteLicense(licenseId);
+        return ResponseEntity.ok("프로젝트 삭제 완료");
+    }
+
 }
