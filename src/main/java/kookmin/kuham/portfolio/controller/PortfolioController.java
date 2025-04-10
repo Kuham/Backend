@@ -44,8 +44,10 @@ public class PortfolioController {
 
     @Operation(summary = "프로젝트 수정")
     @PutMapping("/project/{projectId}/edit")
-    public ResponseEntity<String> editProject(@Valid @RequestBody SaveProjectRequest SaveProjectRequest, @PathVariable("projectId")Long projectId) {
-            portfolioService.editProject(SaveProjectRequest,projectId);
+    public ResponseEntity<String> editProject(@Valid @RequestPart("project") SaveProjectRequest SaveProjectRequest,
+                                              @RequestPart("images") MultipartFile[] images,
+                                              @PathVariable("projectId")Long projectId) throws IOException {
+            portfolioService.editProject(SaveProjectRequest,images,projectId);
             return ResponseEntity.ok("프로젝트 수정 완료");
     }
 

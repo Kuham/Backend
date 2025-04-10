@@ -84,25 +84,8 @@ public class PortfolioService {
         portfolio.getProjects().add(newProject);
         projectRepository.save(newProject);
 
-        if (images != null && images.length > 0) {
-            String uploadDir = System.getProperty("user.dir") + File.separator + "uploads" +
-                    File.separator + "project" + File.separator +userId+ File.separator+ newProject.getId();
-
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
-
-            List<String> imageUrls = new ArrayList<>();
-
-            for (int i = 0; i < images.length; i++) {
-                MultipartFile file = images[i];
-                String fileName = i + "_" + file.getOriginalFilename();
-                file.transferTo(new File(uploadDir, fileName));
-                imageUrls.add("http://localhost:8080/project/" + newProject.getId() + "/" + fileName);
-            }
-
-            newProject.setImages(imageUrls);
-            projectRepository.save(newProject); // 다시 저장
-        }
+        newProject.setImages(uploadImage(userId, newProject.getId(), "project", images));
+        projectRepository.save(newProject); // 다시 저장
     }
 
     public void addLicense(SaveLicenseRequest saveLicenseRequest){
@@ -123,7 +106,7 @@ public class PortfolioService {
 
     }
 
-    public void editProject(SaveProjectRequest saveProjectRequest,Long projectId){
+    public void editProject(SaveProjectRequest saveProjectRequest,MultipartFile[] images,Long projectId) throws IOException{
         //TODO: authentication에서 userId를 가져오도록 수정
         String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
@@ -137,6 +120,8 @@ public class PortfolioService {
                 .findFirst()
                 .orElseThrow(ProjectNotFoundException::new);
 
+        deleteImage(userId,project.getId(),"project");
+
         project.setTitle(saveProjectRequest.projectName());
         project.setStacks(saveProjectRequest.stacks());
         project.setDescription(saveProjectRequest.description());
@@ -144,6 +129,8 @@ public class PortfolioService {
         project.setStartDate(saveProjectRequest.startDate());
         project.setEndDate(saveProjectRequest.endDate());
         project.setInProgress(saveProjectRequest.inProgress());
+
+        project.setImages(uploadImage(userId, project.getId(), "project", images));
 
         portfolioRepository.save(portfolio);
     }
@@ -182,8 +169,8 @@ public class PortfolioService {
                 .filter(p -> Objects.equals(p.getId(),projectId))
                 .findFirst()
                 .orElseThrow(ProjectNotFoundException::new);
-
-        deleteProjectImage(userId,project.getId());
+        // 프로젝트 경로의 이미지 삭제
+        deleteImage(userId,project.getId(),"project");
 
         portfolio.getProjects().remove(project);
         portfolioRepository.save(portfolio);
@@ -207,10 +194,35 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
     }
 
+    public List<String> uploadImage(String userId, Long projectId, String path,MultipartFile[] images) throws IOException{
+        if (images != null && images.length > 0) {
+            String uploadDir = System.getProperty("user.dir") + File.separator + "uploads" +
+                    File.separator + path + File.separator +userId+ File.separator+ projectId;
 
-    public void deleteProjectImage(String userId, Long projectId){
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
+
+            List<String> imageUrls = new ArrayList<>();
+
+            for (int i = 0; i < images.length; i++) {
+                MultipartFile file = images[i];
+                // 파일이 비어있거나 null인 경우 건너뛰기
+                if (file == null || file.isEmpty()) continue;
+
+                String fileName = i + "_" + file.getOriginalFilename();
+                file.transferTo(new File(uploadDir, fileName));
+                imageUrls.add("http://localhost:8080/project/" + projectId + "/" + fileName);
+            }
+
+           return imageUrls;
+        }
+        //images 필드 자체가 없는 경우, 어짜피 파일 없으니 null 반환
+        return null;
+    }
+
+    public void deleteImage(String userId, Long projectId,String path){
         String uploadDirPath = System.getProperty("user.dir") + File.separator +
-                "uploads" + File.separator + "project" + File.separator +userId+ File.separator+ projectId;
+                "uploads" + File.separator + path + File.separator +userId+ File.separator+ projectId;
 
         File uploadDir = new File(uploadDirPath);
         if (uploadDir.exists()) {
