@@ -80,13 +80,13 @@ public class PortfolioService {
                 .inProgress(saveProjectRequest.inProgress())
                 .portfolio(portfolio)
                 .build();
+
         portfolio.getProjects().add(newProject);
         projectRepository.save(newProject);
-        portfolioRepository.save(portfolio);
 
         if (images != null && images.length > 0) {
             String uploadDir = System.getProperty("user.dir") + File.separator + "uploads" +
-                    File.separator + "project" + File.separator + newProject.getId();
+                    File.separator + "project" + File.separator +userId+ File.separator+ newProject.getId();
 
             File dir = new File(uploadDir);
             if (!dir.exists()) dir.mkdirs();
@@ -182,6 +182,20 @@ public class PortfolioService {
                 .filter(p -> Objects.equals(p.getId(),projectId))
                 .findFirst()
                 .orElseThrow(ProjectNotFoundException::new);
+
+        String uploadDirPath = System.getProperty("user.dir") + File.separator +
+                "uploads" + File.separator + "project" + File.separator +userId+ File.separator+ project.getId();
+
+        File uploadDir = new File(uploadDirPath);
+        if (uploadDir.exists()) {
+            File[] files = uploadDir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    file.delete(); // 파일 개별 삭제
+                }
+            }
+            uploadDir.delete(); // 이미지 폴더 자체도 삭제
+        }
 
         portfolio.getProjects().remove(project);
         portfolioRepository.save(portfolio);
