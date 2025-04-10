@@ -3,6 +3,7 @@ package kookmin.kuham.portfolio.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
+import kookmin.kuham.portfolio.dto.request.SaveActivityRequest;
 import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
 import kookmin.kuham.portfolio.service.PortfolioService;
@@ -42,6 +43,14 @@ public class PortfolioController {
         return ResponseEntity.ok("자격증 추가 완료");
     }
 
+    @Operation(summary = "활동 추가")
+    @PostMapping("/activity/add")
+    public ResponseEntity<String> addActivity(@Valid @RequestPart("activity")SaveActivityRequest saveActivityRequest,
+                                              @RequestPart("images") MultipartFile[] images) throws IOException {
+        portfolioService.addActivity(saveActivityRequest,images);
+        return ResponseEntity.ok("활동 추가 완료");
+    }
+
     @Operation(summary = "프로젝트 수정")
     @PutMapping("/project/{projectId}/edit")
     public ResponseEntity<String> editProject(@Valid @RequestPart("project") SaveProjectRequest SaveProjectRequest,
@@ -58,14 +67,14 @@ public class PortfolioController {
         return ResponseEntity.ok("자격증 수정 완료");
     }
 
-    @Operation
+    @Operation(summary = "프로젝트 삭제")
     @DeleteMapping("/project/{projectId}/delete")
     public ResponseEntity<String> deleteProject(@PathVariable("projectId") Long projectId) {
         portfolioService.deleteProject(projectId);
         return ResponseEntity.ok("프로젝트 삭제 완료");
     }
 
-    @Operation
+    @Operation(summary = "자격증 삭제")
     @DeleteMapping("/license/{licenseId}/delete")
     public ResponseEntity<String> deleteLicense(@PathVariable("licenseId") Long licenseId) {
         portfolioService.deleteLicense(licenseId);

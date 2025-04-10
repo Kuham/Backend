@@ -1,13 +1,16 @@
 package kookmin.kuham.portfolio.service;
 
 import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
+import kookmin.kuham.portfolio.dto.request.SaveActivityRequest;
 import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
 import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.portfolio.exception.ProjectNotFoundException;
+import kookmin.kuham.portfolio.repository.ActivityRepository;
 import kookmin.kuham.portfolio.repository.PortfolioRepository;
 import kookmin.kuham.portfolio.repository.ProjectRepository;
+import kookmin.kuham.portfolio.schema.Activity;
 import kookmin.kuham.portfolio.schema.License;
 import kookmin.kuham.portfolio.schema.Portfolio;
 import kookmin.kuham.portfolio.schema.Project;
@@ -31,6 +34,7 @@ public class PortfolioService {
     private final UserRepository userRepository;
     private final PortfolioRepository portfolioRepository;
     private final ProjectRepository projectRepository;
+    private final ActivityRepository activityRepository;
 
     public Portfolio addPortfolio(RegisterInfoRequest registerInfoRequest){
         //입력 받은 정보를 토대로 포트폴리오 객체 생성
@@ -103,6 +107,33 @@ public class PortfolioService {
                         .portfolio(portfolio)
                 .build());
         portfolioRepository.save(portfolio);
+
+    }
+
+    public void addActivity(SaveActivityRequest saveActivityRequest, MultipartFile[] images) throws IOException {
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
+
+        Activity newActivity = Activity.builder()
+                .name(saveActivityRequest.title())
+                .description(saveActivityRequest.description())
+                .oneLineDescription(saveActivityRequest.oneLineDescription())
+                .startDate(saveActivityRequest.startDate())
+                .endDate(saveActivityRequest.endDate())
+                .inProgress(saveActivityRequest.inProgress())
+                .portfolio(portfolio)
+                .build();
+        portfolio.getActivities().add(newActivity);
+        activityRepository.save(newActivity);
+
+        newActivity.setImages(uploadImage(userId, newActivity.getId(), "activity", images));
+        activityRepository.save(newActivity);
+
 
     }
 

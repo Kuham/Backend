@@ -33,4 +33,7 @@ public class Portfolio {
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL,orphanRemoval = true)
     List<License> licenses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL,orphanRemoval = true)
+    List<Activity> activities = new ArrayList<>();
 }
