@@ -4,6 +4,7 @@ import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
 import kookmin.kuham.portfolio.dto.request.SaveActivityRequest;
 import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
+import kookmin.kuham.portfolio.exception.ActivityNotExsitException;
 import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.portfolio.exception.ProjectNotFoundException;
@@ -187,6 +188,35 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
     }
 
+    public void editActivity(SaveActivityRequest saveActivityRequest,MultipartFile[] images, Long activityId) throws IOException{
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
+
+        Activity activity = portfolio.getActivities().stream()
+                .filter((a) -> Objects.equals(a.getId(), activityId))
+                .findFirst()
+                .orElseThrow(ActivityNotExsitException::new);
+
+        deleteImage(userId,activityId,"activity");
+
+        activity.setDescription(saveActivityRequest.description());
+        activity.setOneLineDescription(saveActivityRequest.oneLineDescription());
+        activity.setName(saveActivityRequest.title());
+        activity.setStartDate(saveActivityRequest.startDate());
+        activity.setEndDate(saveActivityRequest.endDate());
+        activity.setInProgress(saveActivityRequest.inProgress());
+
+        activity.setImages(uploadImage(userId,activityId,"activity",images));
+
+
+
+    }
+
     public void deleteProject(Long projectId){
         //TODO: authentication에서 userId를 가져오도록 수정
         String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
@@ -222,6 +252,25 @@ public class PortfolioService {
                 .orElseThrow(LicenseNotFoundException::new);
 
         portfolio.getLicenses().remove(license);
+        portfolioRepository.save(portfolio);
+    }
+
+    public void deleteActivity(Long activityId){
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
+
+        Activity activity = portfolio.getActivities().stream()
+                .filter(p -> Objects.equals(p.getId(),activityId))
+                .findFirst()
+                .orElseThrow(ActivityNotExsitException::new);
+
+        portfolio.getActivities().remove(activity);
+        deleteImage(userId,activityId,"activity");
         portfolioRepository.save(portfolio);
     }
 

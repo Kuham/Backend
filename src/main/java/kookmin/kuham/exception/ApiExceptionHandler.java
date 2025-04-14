@@ -1,6 +1,7 @@
 package kookmin.kuham.exception;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import kookmin.kuham.portfolio.exception.ActivityNotExsitException;
 import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.portfolio.exception.ProjectNotFoundException;
@@ -42,6 +43,11 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(LicenseNotFoundException.class)
     public ResponseEntity<?> licenseNotFoundException(LicenseNotFoundException e){
+        return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ActivityNotExsitException.class)
+    public ResponseEntity<?> activityNotExsitException(ActivityNotExsitException e){
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
 }

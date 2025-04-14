@@ -67,6 +67,15 @@ public class PortfolioController {
         return ResponseEntity.ok("자격증 수정 완료");
     }
 
+    @Operation(summary = "활동 수정")
+    @PutMapping("/activity/{activityId}/edit")
+    public ResponseEntity<String> editActivity(@Valid @RequestPart("activity") SaveActivityRequest saveActivityRequest,
+                                                @RequestPart("images") MultipartFile[] images,
+                                                @PathVariable("activityId")Long activityId) throws IOException {
+        portfolioService.editActivity(saveActivityRequest,images,activityId);
+        return ResponseEntity.ok("활동 수정 완료");
+    }
+
     @Operation(summary = "프로젝트 삭제")
     @DeleteMapping("/project/{projectId}/delete")
     public ResponseEntity<String> deleteProject(@PathVariable("projectId") Long projectId) {
@@ -79,6 +88,13 @@ public class PortfolioController {
     public ResponseEntity<String> deleteLicense(@PathVariable("licenseId") Long licenseId) {
         portfolioService.deleteLicense(licenseId);
         return ResponseEntity.ok("프로젝트 삭제 완료");
+    }
+
+    @Operation(summary = "활동 삭제")
+    @DeleteMapping("/activity/{activityId}/delete")
+    public ResponseEntity<String> deleteActivity(@PathVariable("activityId") Long activityId) {
+        portfolioService.deleteActivity(activityId);
+        return ResponseEntity.ok("활동 삭제 완료");
     }
 
 }
