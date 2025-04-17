@@ -37,13 +37,13 @@ public class Post {
     @ElementCollection(fetch = FetchType.LAZY)
     List<String> roles;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     List<String> preferredCharacters;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     List<String> images;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     List<String> stacks;
 
 

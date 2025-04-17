@@ -5,6 +5,7 @@ import kookmin.kuham.portfolio.exception.ActivityNotExsitException;
 import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
 import kookmin.kuham.portfolio.exception.ProjectNotFoundException;
+import kookmin.kuham.post.exception.PostNotFoundException;
 import kookmin.kuham.user.exception.LoginFailedException;
 import kookmin.kuham.user.exception.UserAlreadyExistException;
 import kookmin.kuham.user.exception.UserNotExistException;
@@ -56,5 +57,10 @@ public class ApiExceptionHandler {
     @ExceptionHandler(IOException.class)
     public ResponseEntity<?> ioException(IOException e){
         return ResponseEntity.status(500).body("File upload failed");
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<?> postNotFoundException(PostNotFoundException e){
+        return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
 }

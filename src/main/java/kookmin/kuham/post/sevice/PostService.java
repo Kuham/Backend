@@ -69,8 +69,18 @@ public class PostService {
         post.setImages(portfolioService.uploadImage(userId, post.getId(), "posts",images));
 
         postRepository.save(post);
+    }
 
+    public void deletePost(Long postId){
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
 
+        Post post = user.getPosts().stream().filter(p-> Objects.equals(p.getId(),postId)).findFirst().orElseThrow(PostNotFoundException::new);
+
+        portfolioService.deleteImage(userId, post.getId(), "posts");
+        user.getPosts().remove(post);
+        postRepository.delete(post);
     }
 
 }
