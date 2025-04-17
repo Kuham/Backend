@@ -3,7 +3,11 @@ package kookmin.kuham.user.schema;
 
 import jakarta.persistence.*;
 import kookmin.kuham.portfolio.schema.Portfolio;
+import kookmin.kuham.post.schema.Post;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,4 +29,6 @@ public class User {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
 }

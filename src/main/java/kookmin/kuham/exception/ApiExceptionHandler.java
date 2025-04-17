@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 @Hidden
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -49,5 +51,10 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ActivityNotExsitException.class)
     public ResponseEntity<?> activityNotExsitException(ActivityNotExsitException e){
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<?> ioException(IOException e){
+        return ResponseEntity.status(500).body("File upload failed");
     }
 }
