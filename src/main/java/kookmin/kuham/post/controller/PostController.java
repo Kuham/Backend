@@ -57,4 +57,11 @@ public class PostController {
         return ResponseEntity.ok(myPosts);
     }
 
+    @Operation(summary = "전체 공고 모아보기",description = "전체 공고 모아보기 api(시간 역순)")
+    @GetMapping("/all-posts")
+    public ResponseEntity<List<getPostsResponse>> getAllPosts(){
+        List<getPostsResponse> allPosts = postService.getPosts(null);
+        return ResponseEntity.ok(allPosts);
+    }
+
 }
