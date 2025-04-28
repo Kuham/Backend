@@ -2,6 +2,7 @@ package kookmin.kuham.post.sevice;
 
 import kookmin.kuham.portfolio.service.PortfolioService;
 import kookmin.kuham.post.dto.request.SavePostRequest;
+import kookmin.kuham.post.dto.response.getPostsResponse;
 import kookmin.kuham.post.exception.PostNotFoundException;
 import kookmin.kuham.post.repository.PostRepository;
 import kookmin.kuham.post.schema.Post;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -81,6 +84,38 @@ public class PostService {
         portfolioService.deleteImage(userId, post.getId(), "posts");
         user.getPosts().remove(post);
         postRepository.delete(post);
+    }
+
+    public List<getPostsResponse> getPosts(String userId){
+        // 만약 userId가 넘어온 경우 해당 유저의 공고를 가져옴
+        if (userId != null) {
+            return postRepository.findAllByUserId(userId).stream()
+                    .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                    .map(post -> new getPostsResponse(
+                            post.getId(),
+                            post.getTitle(),
+                            post.getDescription(),
+                            post.getDomain(),
+                            post.getCreatedAt(),
+                            post.getUser().getName(),
+                            post.getUser().getMajor()
+                    )).toList();
+        } else {
+            // 만약 userId가 넘어오지 않은 경우 모든 공고를 가져옴
+            return postRepository.findAll().stream()
+                    .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                    .map(post -> new getPostsResponse(
+                            post.getId(),
+                            post.getTitle(),
+                            post.getDescription(),
+                            post.getDomain(),
+                            post.getCreatedAt(),
+                            post.getUser().getName(),
+                            post.getUser().getMajor()
+                    )).toList();
+
+        }
+
     }
 
 }

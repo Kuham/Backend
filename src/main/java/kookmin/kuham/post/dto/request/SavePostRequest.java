@@ -32,7 +32,7 @@ public record SavePostRequest(
         Integer maxMember,
 
         @Nullable
-        @Schema(description = "기술 스택")
+        @Schema(description = "필요 역할")
         List<String> roles,
 
         @Nullable
@@ -40,7 +40,7 @@ public record SavePostRequest(
         List<String> preferredCharacters,
 
         @Nullable
-        @Schema(description = "기타 스택")
+        @Schema(description = "기술 스택")
         List<String> stacks
 
 ) {
