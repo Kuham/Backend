@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
-
+    // 클라이언트에서 "/app/chat/message"로 메시지를 보내면 이 메서드가 호출됨
     @MessageMapping("chat/message")
     public void sendMessage(ChatMessage message) {
         // 메시지를 수신한 후, 해당 방의 모든 사용자에게 메시지를 전송
