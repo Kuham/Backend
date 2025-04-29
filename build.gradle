@@ -43,8 +43,9 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0' // Swagger
 	// Webclient
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	// Redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// Websocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 }
 
 tasks.named('test') {
