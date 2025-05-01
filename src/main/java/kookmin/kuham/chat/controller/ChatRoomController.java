@@ -1,7 +1,7 @@
 package kookmin.kuham.chat.controller;
 
 import kookmin.kuham.chat.dto.ChatRequest;
-import kookmin.kuham.chat.schema.ChatRoom;
+import kookmin.kuham.chat.dto.response.ChatRoomReponse;
 import kookmin.kuham.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ public class ChatRoomController {
     private final ChatService chatService;
 
     @PostMapping("/start")
-    public ResponseEntity<ChatRoom> startChat(@RequestBody ChatRequest chatRequest){
-            ChatRoom room = chatService.createOrFindRoom(chatRequest.sender(), chatRequest.receiver());
+    public ResponseEntity<ChatRoomReponse> startChat(@RequestBody ChatRequest chatRequest){
+            ChatRoomReponse room = chatService.createOrFindRoom(chatRequest.sender(), chatRequest.receiver());
             return ResponseEntity.ok(room);
     }
 }

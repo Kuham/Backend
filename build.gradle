@@ -45,6 +45,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	// Websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	//MongoDB
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	// roomID hash 생성
+	implementation 'commons-codec:commons-codec:1.15'
 
 }
 

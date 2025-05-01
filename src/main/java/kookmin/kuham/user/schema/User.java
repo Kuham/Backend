@@ -29,6 +29,9 @@ public class User {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> chatRooms = new ArrayList<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 }
