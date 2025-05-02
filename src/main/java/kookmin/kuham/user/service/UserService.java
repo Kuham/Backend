@@ -57,7 +57,7 @@ public class UserService {
                 .build();
         userRepository.save(newUser);
 
-        //TODO: 회원 가입 성공시 jwt생성
+        //TODO: 회원 가입 성공시 jwt 생성
         return RegisterSuccessResponse.builder()
                 .uid(newUser.getId())
                 .email(newUser.getEmail())
