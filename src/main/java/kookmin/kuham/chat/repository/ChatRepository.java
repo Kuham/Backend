@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatRepository extends MongoRepository<ChatRoom,String> {
+    // MongoDB에서 메시지를 ID로 찾는 메서드
+    ChatRoom findMessageByRoomId(String messageId);
 }
