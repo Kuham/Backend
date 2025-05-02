@@ -3,6 +3,7 @@ package kookmin.kuham.chat.dto.request;
 import kookmin.kuham.chat.schema.ChatMessage;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +20,7 @@ public class ChatMessageRequest {
                 .sender(sender)
                 .message(message)
                 .readBy(readBy)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 }

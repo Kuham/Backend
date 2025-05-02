@@ -1,5 +1,6 @@
 package kookmin.kuham.chat.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import kookmin.kuham.chat.dto.request.ReadMessageRequest;
 import kookmin.kuham.chat.exception.RoomNotExistException;
 import kookmin.kuham.chat.repository.ChatRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -34,6 +36,7 @@ public class ChatController {
         messagingTemplate.convertAndSend("/topic/chatroom/" + message.getRoomId(), newMessage);
     }
 
+    @Operation(summary = "메시지 읽음 처리")
     @PutMapping("chat/read")
     public ResponseEntity<?> readMessage(@RequestBody ReadMessageRequest req) {
         String userId = "userId"; // jwt에서 실제 사용자 ID로 변경해야 함
@@ -47,6 +50,14 @@ public class ChatController {
                     chatRepository.save(room);
                 });
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "채팅방 입장")
+    @GetMapping("/chat/enter")
+    public ResponseEntity<?> enterChatRoom(String roomId) {
+        // 채팅방 입장 처리 로직
+        ChatRoom room = chatRepository.findById(roomId).orElseThrow(RoomNotExistException::new);
+        return ResponseEntity.ok(room);
     }
 
 }
