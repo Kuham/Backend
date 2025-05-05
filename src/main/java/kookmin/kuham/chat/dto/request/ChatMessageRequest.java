@@ -1,25 +1,26 @@
 package kookmin.kuham.chat.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import kookmin.kuham.chat.schema.ChatMessage;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Data
 public class ChatMessageRequest {
+    @Schema(description = "채팅방 ID")
+    @NotNull
     private String roomId;
-    private String sender;
+    @Schema(description = "메시지 내용")
     private String message;
-    private List<String> readBy = new ArrayList<>();
 
-    public ChatMessage toEntitiy(){
-        return ChatMessage.builder().messageId(UUID.randomUUID().toString()).roomId(roomId)
-                .sender(sender)
+
+    public ChatMessage toEntity(){
+        return ChatMessage.builder().messageId(UUID.randomUUID().toString())
+                .roomId(roomId)
                 .message(message)
-                .readBy(readBy)
                 .createdAt(LocalDateTime.now())
                 .build();
     }

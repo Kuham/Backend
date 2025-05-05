@@ -1,6 +1,8 @@
 package kookmin.kuham.exception;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import kookmin.kuham.chat.exception.RoomNotExistException;
+import kookmin.kuham.chat.exception.UserNotContainException;
 import kookmin.kuham.portfolio.exception.ActivityNotExsitException;
 import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
@@ -61,6 +63,14 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(PostNotFoundException.class)
     public ResponseEntity<?> postNotFoundException(PostNotFoundException e){
+        return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
+    }
+    @ExceptionHandler(RoomNotExistException.class)
+    public ResponseEntity<?> roomNotExistException(RoomNotExistException e){
+        return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
+    }
+    @ExceptionHandler(UserNotContainException.class)
+    public ResponseEntity<?> userNotContainException(UserNotContainException e){
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
 }

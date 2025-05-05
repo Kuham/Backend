@@ -20,5 +20,6 @@ public class ChatRoom {
     @Id
     private String roomId;
 
+    private List<String> userIds = new ArrayList<>();
     private List<ChatMessage> messages = new ArrayList<>();
 }
