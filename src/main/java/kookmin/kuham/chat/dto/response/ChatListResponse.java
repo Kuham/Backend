@@ -11,6 +11,7 @@ public record ChatListResponse(
         String otherUserName,
         String otherUserMajor,
         String lastMessage,
-        LocalDateTime lastMessageTime
+        LocalDateTime lastMessageTime,
+        Boolean isRead
 ) {
 }

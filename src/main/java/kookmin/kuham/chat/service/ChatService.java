@@ -1,5 +1,6 @@
 package kookmin.kuham.chat.service;
 
+import kookmin.kuham.chat.dto.response.ChatContentResponse;
 import kookmin.kuham.chat.dto.response.ChatListResponse;
 import kookmin.kuham.chat.dto.response.ChatRoomReponse;
 import kookmin.kuham.chat.repository.ChatRepository;
@@ -12,10 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -81,6 +80,8 @@ public class ChatService {
                     User otherUser = userRepository.findById(otherUserid).orElseThrow(UserNotExistException::new);
                     // 채팅방의 마지막 메시지를 가져오기
                     ChatMessage lastMessage = chatRoom.getMessages().get(chatRoom.getMessages().size() - 1);
+                    //마지막 메세지를 현재 유저가 안읽었으면 안읽으 메세지 있다고 판단
+                    Boolean isRead = lastMessage.getReadBy().contains(userId);
                     ChatListResponse chat = ChatListResponse.builder()
                             .roomId(chatRoom.getRoomId())
                             .otherUserId(otherUserid)
@@ -88,11 +89,45 @@ public class ChatService {
                             .otherUserMajor(otherUser.getMajor())
                             .lastMessageTime(lastMessage.getCreatedAt())
                             .lastMessage(lastMessage.getMessage())
+                            //안 읽은 메세지가 있는지
+                            .isRead(isRead)
                             .build();
                     chatList.add(chat);
                 }
         );
         chatList.sort(Comparator.comparing(ChatListResponse::lastMessageTime).reversed());
         return chatList;
+    }
+
+    public List<ChatContentResponse> getChatContents(ChatRoom room){
+        //TODO: authentication에서 userId를 가져오도록 수정
+        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+        List<ChatContentResponse> responseList = new ArrayList<>();
+
+        for (ChatMessage message : room.getMessages()) {
+            // 읽음 처리
+            if (!message.getReadBy().contains(userId)) {
+                message.getReadBy().add(userId);
+            }
+
+            // isReadByOtherUser 판단
+            boolean isReadByOther =
+                    message.getSender().equals(userId) && message.getReadBy().size() > 1;
+
+            // 응답 객체 생성
+            ChatContentResponse response = ChatContentResponse.builder()
+                    .message(message.getMessage())
+                    .senderId(message.getSender())
+                    .createdAt(message.getCreatedAt())
+                    .isReadByOtherUser(isReadByOther)
+                    .build();
+
+            responseList.add(response);
+        }
+
+        chatRepository.save(room);
+
+        return responseList;
+
     }
 }

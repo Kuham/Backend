@@ -16,6 +16,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -69,11 +70,12 @@ public class ChatController {
     }
 
     @Operation(summary = "채팅방 입장")
-    @GetMapping("/chat/enter")
-    public ResponseEntity<?> enterChatRoom(String roomId) {
+    @GetMapping("/chat/enter/{roomId}")
+    public ResponseEntity<?> enterChatRoom(@PathVariable("roomId") String roomId) {
         // 채팅방 입장 처리 로직
         ChatRoom room = chatRepository.findById(roomId).orElseThrow(RoomNotExistException::new);
-        return ResponseEntity.ok(room);
+        //채팅방의 메세지 기록 가져오기
+        return ResponseEntity.ok(chatService.getChatContents(room));
     }
 
     @Operation(summary = "채팅방 목록")
@@ -82,5 +84,6 @@ public class ChatController {
         // 채팅방 목록 조회 처리 로직
         return ResponseEntity.ok(chatService.getChats());
     }
+
 
 }
