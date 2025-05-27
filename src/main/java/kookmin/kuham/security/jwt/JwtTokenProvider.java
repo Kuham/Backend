@@ -1,5 +1,6 @@
 package kookmin.kuham.security.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
     private final SecretKey secretKey;
 
-    public JwtTokenProvider(@Value("${spring.jwt.secret") String secretKey) {
+    public JwtTokenProvider(@Value("${spring.jwt.secret}") String secretKey) {
         this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -27,5 +28,13 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(System.currentTimeMillis() + tokenValidTime))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public Claims validateToken(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
