@@ -9,7 +9,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JwtTokenProvider {
     private final SecretKey secretKey;
 
