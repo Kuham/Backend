@@ -2,6 +2,7 @@ package kookmin.kuham.user.service;
 
 import kookmin.kuham.portfolio.schema.Portfolio;
 import kookmin.kuham.portfolio.service.PortfolioService;
+import kookmin.kuham.security.jwt.JwtTokenProvider;
 import kookmin.kuham.user.dto.request.EditUserRequest;
 import kookmin.kuham.user.dto.request.GoogleUserInfo;
 import kookmin.kuham.user.dto.request.RegisterInfoRequest;
@@ -30,6 +31,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final PortfolioService portfolioService;
+    private final JwtTokenProvider jwtTokenProvider;
     private final WebClient webClient = WebClient.create();
 
     @Value("${google.client.id}")
@@ -92,13 +94,17 @@ public class UserService {
 
         if (userRepository.existsByEmail(Objects.requireNonNull(googleUserInfo).email())){
             User user = userRepository.findByEmail(googleUserInfo.email());
-            //TODO: 유저가 이미 존재하는 경우도 바로 로그인 성공, JWT생성
+
+            //user가 존재할 경우 jwt 토큰 생성
+            String token = jwtTokenProvider.createToken(user.getId());
+
             return UserRegisterResponse.builder()
                     .newUser(false)
                     .uid(user.getId())
                     .email(user.getEmail())
                     .name(user.getName())
                     .profileUrl(user.getProfileUrl())
+                    .token(token)
                     .build();
         }else {
             return UserRegisterResponse.builder()
@@ -107,6 +113,7 @@ public class UserService {
                     .email(googleUserInfo.email())
                     .name(googleUserInfo.name())
                     .profileUrl(googleUserInfo.picture())
+                    .token(null)
                     .build();
         }
     }

@@ -8,6 +8,7 @@ public record UserRegisterResponse(
         String uid,
         String name,
         String email,
-        String profileUrl
+        String profileUrl,
+        String token
 ) {
 }
