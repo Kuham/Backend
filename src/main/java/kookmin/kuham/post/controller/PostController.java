@@ -8,6 +8,7 @@ import kookmin.kuham.post.sevice.PostService;
 import kookmin.kuham.user.exception.UserNotExistException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +26,8 @@ public class PostController {
 
     @Operation(summary = "공고 생성")
     @PostMapping("/create")
-    public ResponseEntity<String> createPost(@Valid @RequestPart("post") SavePostRequest savePostRequest, @RequestPart("images") MultipartFile[] images) throws IOException {
-        postService.addPost(savePostRequest, images);
+    public ResponseEntity<String> createPost(@Valid @RequestPart("post") SavePostRequest savePostRequest, @RequestPart("images") MultipartFile[] images, @AuthenticationPrincipal String userId) throws IOException {
+        postService.addPost(savePostRequest, images,userId);
         return ResponseEntity.ok("공고 업로드 성공");
     }
 

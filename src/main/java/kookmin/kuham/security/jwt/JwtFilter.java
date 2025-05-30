@@ -54,6 +54,8 @@ public class JwtFilter extends OncePerRequestFilter {
             }catch (Exception e){
                 // 토큰이 유효하지 않은 경우
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write("{\"message\": \"유효하지 않은 토큰입니다.\"}");
                 return;
             }
         }

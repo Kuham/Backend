@@ -30,7 +30,7 @@ public class Post {
     private String endDate;
     private Integer maxMember;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

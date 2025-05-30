@@ -25,7 +25,7 @@ public class User {
     private String grade;
     private String major;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 

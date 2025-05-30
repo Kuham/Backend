@@ -118,9 +118,8 @@ public class UserService {
         }
     }
 
-    public void updateUserInfo(EditUserRequest editUserRequest, MultipartFile file) throws IOException {
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "49d2c0a5-b081-4eeb-8e71-cdba12a6b3cc";
+    public void updateUserInfo(EditUserRequest editUserRequest, MultipartFile file,String userId) throws IOException {
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         // 업로드할 경로 설정
         String rootPath = System.getProperty("user.dir"); // 예: C:/Users/moong/Backend
@@ -150,5 +149,15 @@ public class UserService {
         user.setMajor(editUserRequest.major());
 
         userRepository.save(user);
+    }
+
+    public void deleteUser(String userId) {
+
+
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        userRepository.delete(user);
+
+
+        return;
     }
 }

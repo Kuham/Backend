@@ -10,6 +10,7 @@ import kookmin.kuham.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,10 +54,18 @@ public class UserController {
 
     @Operation(summary = "회원 정보 수정",description = "회원 정보 수정 api")
     @PutMapping("/edit")
-    public ResponseEntity<String> updateUserInfo(@ModelAttribute EditUserRequest editUserRequest, @RequestPart("file")MultipartFile file) throws IOException {
+    public ResponseEntity<String> updateUserInfo(@ModelAttribute EditUserRequest editUserRequest, @RequestPart("file")MultipartFile file, @AuthenticationPrincipal String userId) throws IOException {
 
-        userService.updateUserInfo(editUserRequest,file);
+        userService.updateUserInfo(editUserRequest,file,userId);
+
         return ResponseEntity.ok("회원 정보 수정 완료");
+    }
+
+    @Operation(summary = "회원 탈퇴",description = "회원 탈퇴 api")
+    @DeleteMapping("withdraw")
+    public ResponseEntity<String>withdrawUser(@AuthenticationPrincipal String userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("회원 탈퇴 완료");
     }
 
 

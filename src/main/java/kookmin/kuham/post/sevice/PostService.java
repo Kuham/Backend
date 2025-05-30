@@ -26,9 +26,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final PortfolioService portfolioService;
 
-    public void addPost(SavePostRequest savePostRequest, MultipartFile[] images) throws IOException {
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void addPost(SavePostRequest savePostRequest, MultipartFile[] images,String userId) throws IOException {
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
 
         Post newPost = Post.builder()
