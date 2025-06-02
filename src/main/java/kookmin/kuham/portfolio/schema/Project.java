@@ -34,4 +34,7 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
     Portfolio portfolio;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    List<String> roles;
 }

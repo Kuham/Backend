@@ -84,6 +84,7 @@ public class PortfolioService {
                 .endDate(saveProjectRequest.endDate())
                 .inProgress(saveProjectRequest.inProgress())
                 .portfolio(portfolio)
+                .roles(saveProjectRequest.roles())
                 .build();
 
         portfolio.getProjects().add(newProject);
@@ -128,6 +129,7 @@ public class PortfolioService {
                 .endDate(saveActivityRequest.endDate())
                 .inProgress(saveActivityRequest.inProgress())
                 .portfolio(portfolio)
+                .roles(saveActivityRequest.roles())
                 .build();
         portfolio.getActivities().add(newActivity);
         activityRepository.save(newActivity);
@@ -161,6 +163,7 @@ public class PortfolioService {
         project.setStartDate(saveProjectRequest.startDate());
         project.setEndDate(saveProjectRequest.endDate());
         project.setInProgress(saveProjectRequest.inProgress());
+        project.setRoles(saveProjectRequest.roles());
 
         project.setImages(uploadImage(userId, project.getId(), "project", images));
 
@@ -210,6 +213,7 @@ public class PortfolioService {
         activity.setStartDate(saveActivityRequest.startDate());
         activity.setEndDate(saveActivityRequest.endDate());
         activity.setInProgress(saveActivityRequest.inProgress());
+        activity.setRoles(saveActivityRequest.roles());
 
         activity.setImages(uploadImage(userId,activityId,"activity",images));
 

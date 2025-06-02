@@ -1,6 +1,5 @@
 package kookmin.kuham.portfolio.schema;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +29,9 @@ public class Activity {
 
     @ElementCollection(fetch = FetchType.LAZY)
     List<String> images;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    List<String> roles;
 
     private boolean inProgress;
 

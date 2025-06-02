@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 public record SaveActivityRequest(
 
         @Schema(description = "활동 명")
@@ -28,6 +30,10 @@ public record SaveActivityRequest(
 
         @Schema(description = "활동 진행 중 여부")
         @NotNull
-        boolean inProgress
+        boolean inProgress,
+
+        @Schema(description = "자기 역할")
+        @Nullable
+        List<String> roles
 ) {
 }

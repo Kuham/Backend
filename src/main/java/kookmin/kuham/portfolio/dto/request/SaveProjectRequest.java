@@ -33,7 +33,10 @@ public record SaveProjectRequest(
 
         @Schema(description = "프로젝트 진행 중 여부")
         @NotNull
-        boolean inProgress
+        boolean inProgress,
 
+        @Schema(description = "자기 역할")
+        @Nullable
+        List<String> roles
 ) {
 }
