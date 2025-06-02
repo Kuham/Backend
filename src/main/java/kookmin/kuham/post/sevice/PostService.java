@@ -51,9 +51,8 @@ public class PostService {
 
     }
 
-    public void updatePost(SavePostRequest savePostRequest, MultipartFile[] images, Long postId) throws IOException{
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void updatePost(SavePostRequest savePostRequest, MultipartFile[] images, Long postId,String userId) throws IOException{
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
 
         Post post = user.getPosts().stream().filter(p-> Objects.equals(p.getId(),postId)).findFirst().orElseThrow(PostNotFoundException::new);
@@ -73,9 +72,8 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void deletePost(Long postId){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void deletePost(Long postId,String userId){
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
 
         Post post = user.getPosts().stream().filter(p-> Objects.equals(p.getId(),postId)).findFirst().orElseThrow(PostNotFoundException::new);

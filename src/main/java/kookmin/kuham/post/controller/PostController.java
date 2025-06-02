@@ -35,23 +35,25 @@ public class PostController {
     @PutMapping("/update/{postId}")
     public ResponseEntity<String> updatePost(@Valid @RequestPart("post") SavePostRequest savePostRequest
             , @RequestPart("images") MultipartFile[] images
-            , @PathVariable("postId") Long postId) throws IOException {
-        postService.updatePost(savePostRequest, images,postId);
+            , @PathVariable("postId") Long postId
+            , @AuthenticationPrincipal String userId
+    ) throws IOException {
+        postService.updatePost(savePostRequest, images,postId,userId);
         return ResponseEntity.ok("공고 수정 성공");
     }
 
     @Operation(summary = "공고 삭제")
     @DeleteMapping("/delete/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable("postId") Long postId) {
-        postService.deletePost(postId);
+    public ResponseEntity<String> deletePost(@PathVariable("postId") Long postId,
+                                             @AuthenticationPrincipal String userId)  {
+        postService.deletePost(postId,userId);
         return ResponseEntity.ok("공고 삭제 성공");
     }
 
     @Operation(summary = "자기 공고 모아보기",description = "자신 공고 모아보기 api(시간 역순)")
     @GetMapping("/my-posts")
-    public ResponseEntity<List<getPostsResponse>> getMyPosts(){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public ResponseEntity<List<getPostsResponse>> getMyPosts(@AuthenticationPrincipal String userId){
+
         userRepository.findById(userId).orElseThrow(UserNotExistException::new);
 
         List<getPostsResponse> myPosts = postService.getPosts(userId);

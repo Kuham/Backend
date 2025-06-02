@@ -48,10 +48,9 @@ public class PortfolioService {
 
 
     }
-    public void editPortfolio( EditPortfolioRequest editPortfolioRequest) {
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
-        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+    public void editPortfolio( EditPortfolioRequest editPortfolioRequest,String uid) {
+
+        User user = userRepository.findById(uid).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
             throw new PortfolioNotExistException();
@@ -67,10 +66,9 @@ public class PortfolioService {
         userRepository.save(user);
     }
 
-    public void addProject(SaveProjectRequest saveProjectRequest, MultipartFile[] images)throws IOException {
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
-        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+    public void addProject(SaveProjectRequest saveProjectRequest, MultipartFile[] images,String uid)throws IOException {
+
+        User user = userRepository.findById(uid).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
             throw new PortfolioNotExistException();
@@ -90,13 +88,12 @@ public class PortfolioService {
         portfolio.getProjects().add(newProject);
         projectRepository.save(newProject);
 
-        newProject.setImages(uploadImage(userId, newProject.getId(), "project", images));
+        newProject.setImages(uploadImage(uid, newProject.getId(), "project", images));
         projectRepository.save(newProject); // 다시 저장
     }
 
-    public void addLicense(SaveLicenseRequest saveLicenseRequest){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void addLicense(SaveLicenseRequest saveLicenseRequest,String userId){
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
@@ -112,9 +109,8 @@ public class PortfolioService {
 
     }
 
-    public void addActivity(SaveActivityRequest saveActivityRequest, MultipartFile[] images) throws IOException {
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void addActivity(SaveActivityRequest saveActivityRequest, MultipartFile[] images,String userId) throws IOException {
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
@@ -140,9 +136,8 @@ public class PortfolioService {
 
     }
 
-    public void editProject(SaveProjectRequest saveProjectRequest,MultipartFile[] images,Long projectId) throws IOException{
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void editProject(SaveProjectRequest saveProjectRequest,MultipartFile[] images,Long projectId,String userId) throws IOException{
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
@@ -170,9 +165,8 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
     }
 
-    public void editLicense(SaveLicenseRequest saveLicenseRequest, Long licenseId){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void editLicense(SaveLicenseRequest saveLicenseRequest, Long licenseId,String userId){
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
@@ -191,9 +185,8 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
     }
 
-    public void editActivity(SaveActivityRequest saveActivityRequest,MultipartFile[] images, Long activityId) throws IOException{
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void editActivity(SaveActivityRequest saveActivityRequest,MultipartFile[] images, Long activityId,String userId) throws IOException{
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
@@ -221,9 +214,8 @@ public class PortfolioService {
 
     }
 
-    public void deleteProject(Long projectId){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void deleteProject(Long projectId,String userId){
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
@@ -241,9 +233,8 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
     }
 
-    public void deleteLicense(Long licenseId){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void deleteLicense(Long licenseId,String userId){
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
@@ -259,9 +250,8 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
     }
 
-    public void deleteActivity(Long activityId){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void deleteActivity(Long activityId,String userId){
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
