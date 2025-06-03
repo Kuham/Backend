@@ -5,6 +5,9 @@ import kookmin.kuham.portfolio.dto.request.SaveActivityRequest;
 import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
 import kookmin.kuham.portfolio.dto.response.getPortfolioContentResponse;
+import kookmin.kuham.portfolio.dto.response.userActivityResponse;
+import kookmin.kuham.portfolio.dto.response.userLicenseResponse;
+import kookmin.kuham.portfolio.dto.response.userProjectsResponse;
 import kookmin.kuham.portfolio.exception.ActivityNotExsitException;
 import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
@@ -312,12 +315,37 @@ public class PortfolioService {
     }
 
     public getPortfolioContentResponse getPortfolioContent(String userId){
+
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Portfolio portfolio = user.getPortfolio();
         if (portfolio == null){
             throw new PortfolioNotExistException();
         }
         return new getPortfolioContentResponse(user, portfolio);
+
+    }
+
+    public userProjectsResponse getMyProjects(String userId){
+
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+
+        return new userProjectsResponse(user.getPortfolio().getProjects());
+
+    }
+
+    public userActivityResponse getMyActivities(String userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+
+        return new userActivityResponse(user.getPortfolio().getActivities());
+
+    }
+
+    public userLicenseResponse getMyLicenses(String userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+
+        return new userLicenseResponse(user.getPortfolio().getLicenses());
 
     }
 

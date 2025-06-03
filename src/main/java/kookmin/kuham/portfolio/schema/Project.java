@@ -1,5 +1,6 @@
 package kookmin.kuham.portfolio.schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +33,7 @@ public class Project {
     List<String> images;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "portfolio_id")
     Portfolio portfolio;
 

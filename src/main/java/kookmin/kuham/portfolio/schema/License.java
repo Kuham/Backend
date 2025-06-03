@@ -1,5 +1,6 @@
 package kookmin.kuham.portfolio.schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class License {
     private String licenseDate;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 }

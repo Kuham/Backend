@@ -7,6 +7,9 @@ import kookmin.kuham.portfolio.dto.request.SaveActivityRequest;
 import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
 import kookmin.kuham.portfolio.dto.response.getPortfolioContentResponse;
+import kookmin.kuham.portfolio.dto.response.userActivityResponse;
+import kookmin.kuham.portfolio.dto.response.userLicenseResponse;
+import kookmin.kuham.portfolio.dto.response.userProjectsResponse;
 import kookmin.kuham.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -114,8 +117,25 @@ public class PortfolioController {
     @Operation(summary = "포트폴리오 불러오기(마이페이지)")
     @GetMapping("/load")
     public ResponseEntity<getPortfolioContentResponse> getPortfolioContent(@AuthenticationPrincipal String userId) {
-        System.out.print(userId + "__________________________________________");
         return ResponseEntity.ok(portfolioService.getPortfolioContent(userId));
+    }
+
+    @Operation(summary = "자신의 프로젝트 가져오기")
+    @GetMapping("/myProjects")
+    public ResponseEntity<userProjectsResponse> getMyProjects(@AuthenticationPrincipal String userId) {
+        return ResponseEntity.ok(portfolioService.getMyProjects(userId));
+    }
+
+    @Operation(summary = "자신의 활동 가져오기")
+    @GetMapping("/myActivities")
+    public ResponseEntity<userActivityResponse> getMyActivities(@AuthenticationPrincipal String userId) {
+        return ResponseEntity.ok(portfolioService.getMyActivities(userId));
+    }
+
+    @Operation(summary = "자신의 자격증 가져오기")
+    @GetMapping("/myLicenses")
+    public ResponseEntity<userLicenseResponse> getMyLicenses(@AuthenticationPrincipal String userId) {
+        return ResponseEntity.ok(portfolioService.getMyLicenses(userId));
     }
 
 

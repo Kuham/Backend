@@ -1,5 +1,6 @@
 package kookmin.kuham.portfolio.schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class Activity {
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
+    @JsonIgnore
     Portfolio portfolio;
 
     @ElementCollection(fetch = FetchType.LAZY)
