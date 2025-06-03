@@ -25,6 +25,8 @@ public class UserController {
 
     @Value("${google.client.id}")
     private String googleClientId;
+    @Value("${google.client.redirect-uri}")
+    private String googleRedirectUri;
 
     @Operation(summary = "회원가입",description = "회원가입을 진행합니다")
     @PostMapping("/register")
@@ -38,7 +40,7 @@ public class UserController {
     @GetMapping("/google/login")
     public String googleLogin() {
         String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-                + "&redirect_uri=http://localhost:8080/auth/login&response_type=code&scope=email%20profile%20openid&access_type=offline";
+                + "&redirect_uri="+googleRedirectUri+"&response_type=code&scope=email%20profile%20openid&access_type=offline";
 
         return "redirect:" + reqUrl;
     }
