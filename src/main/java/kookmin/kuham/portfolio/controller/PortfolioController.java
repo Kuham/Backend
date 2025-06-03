@@ -6,6 +6,7 @@ import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
 import kookmin.kuham.portfolio.dto.request.SaveActivityRequest;
 import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
+import kookmin.kuham.portfolio.dto.response.getPortfolioContentResponse;
 import kookmin.kuham.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -109,5 +110,13 @@ public class PortfolioController {
         portfolioService.deleteActivity(activityId,userId);
         return ResponseEntity.ok("활동 삭제 완료");
     }
+
+    @Operation(summary = "포트폴리오 불러오기(마이페이지)")
+    @GetMapping("/load")
+    public ResponseEntity<getPortfolioContentResponse> getPortfolioContent(@AuthenticationPrincipal String userId) {
+        System.out.print(userId + "__________________________________________");
+        return ResponseEntity.ok(portfolioService.getPortfolioContent(userId));
+    }
+
 
 }

@@ -4,6 +4,7 @@ import kookmin.kuham.portfolio.dto.request.EditPortfolioRequest;
 import kookmin.kuham.portfolio.dto.request.SaveActivityRequest;
 import kookmin.kuham.portfolio.dto.request.SaveLicenseRequest;
 import kookmin.kuham.portfolio.dto.request.SaveProjectRequest;
+import kookmin.kuham.portfolio.dto.response.getPortfolioContentResponse;
 import kookmin.kuham.portfolio.exception.ActivityNotExsitException;
 import kookmin.kuham.portfolio.exception.LicenseNotFoundException;
 import kookmin.kuham.portfolio.exception.PortfolioNotExistException;
@@ -308,6 +309,16 @@ public class PortfolioService {
             }
             uploadDir.delete(); // 이미지 폴더 자체도 삭제
         }
+    }
+
+    public getPortfolioContentResponse getPortfolioContent(String userId){
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        Portfolio portfolio = user.getPortfolio();
+        if (portfolio == null){
+            throw new PortfolioNotExistException();
+        }
+        return new getPortfolioContentResponse(user, portfolio);
+
     }
 
 }
