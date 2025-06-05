@@ -18,6 +18,7 @@ import java.util.List;
 public class User {
     @Id
     private String id;
+    @Column(length = 1024)
     private String profileUrl;
     private String name;
     private String email;
