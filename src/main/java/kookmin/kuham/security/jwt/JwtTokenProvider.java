@@ -22,7 +22,7 @@ public class JwtTokenProvider {
 
     public String createToken(String userId){
         // 30분
-        long tokenValidTime = 1000L * 60 * 30;
+        long tokenValidTime = 1000L * 60 * 60;
         return Jwts.builder()
                 .setSubject(userId)
                 .setExpiration(new Date(System.currentTimeMillis() + tokenValidTime))

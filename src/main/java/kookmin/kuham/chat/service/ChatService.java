@@ -62,9 +62,9 @@ public class ChatService {
         userRepository.save(user);
     }
 
-    public List<ChatListResponse> getChats(){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public List<ChatListResponse> getChats(String userId){
+
+
         User currentUser = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         // 채팅방 목록을 생성
         List<ChatListResponse> chatList = new ArrayList<>();
@@ -99,9 +99,9 @@ public class ChatService {
         return chatList;
     }
 
-    public List<ChatContentResponse> getChatContents(ChatRoom room){
-        //TODO: authentication에서 userId를 가져오도록 수정
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public List<ChatContentResponse> getChatContents(ChatRoom room,String userId) {
+
+
         List<ChatContentResponse> responseList = new ArrayList<>();
 
         for (ChatMessage message : room.getMessages()) {

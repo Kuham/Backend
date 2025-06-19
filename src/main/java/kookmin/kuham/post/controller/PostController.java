@@ -7,6 +7,7 @@ import kookmin.kuham.post.dto.response.getPostsResponse;
 import kookmin.kuham.post.sevice.PostService;
 import kookmin.kuham.user.exception.UserNotExistException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -65,6 +66,13 @@ public class PostController {
     public ResponseEntity<List<getPostsResponse>> getAllPosts(){
         List<getPostsResponse> allPosts = postService.getPosts(null);
         return ResponseEntity.ok(allPosts);
+    }
+
+    @Operation(summary = "공고 상세 조회", description = "공고 상세 조회 api")
+    @GetMapping("/{postId}")
+    public ResponseEntity<getPostsResponse> getPostDetail(@PathVariable("postId") Long postId) {
+        getPostsResponse postDetail = postService.getPostDetail(postId);
+        return ResponseEntity.ok(postDetail);
     }
 
 }

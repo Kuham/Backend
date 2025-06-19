@@ -56,16 +56,14 @@ public class UserController {
 
         String redirectUrl = "http://localhost:3000/callback"
                 + "?newUser=" + response.newUser()
-                + "&uid=" + safeEncode(response.uid())
-                + "&name=" + safeEncode(response.name())
                 + "&email=" + safeEncode(response.email())
-                + "&profileUrl=" + safeEncode(response.profileUrl())
                 + "&token=" + safeEncode(response.token());
          return "redirect:" + redirectUrl;
     }
 
     @Operation(summary = "회원 정보 수정",description = "회원 정보 수정 api")
     @PutMapping("/edit")
+    @ResponseBody
     public ResponseEntity<String> updateUserInfo(@ModelAttribute EditUserRequest editUserRequest, @RequestPart("file")MultipartFile file, @AuthenticationPrincipal String userId) throws IOException {
 
         userService.updateUserInfo(editUserRequest,file,userId);
@@ -75,6 +73,7 @@ public class UserController {
 
     @Operation(summary = "회원 탈퇴",description = "회원 탈퇴 api")
     @DeleteMapping("withdraw")
+    @ResponseBody
     public ResponseEntity<String>withdrawUser(@AuthenticationPrincipal String userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok("회원 탈퇴 완료");

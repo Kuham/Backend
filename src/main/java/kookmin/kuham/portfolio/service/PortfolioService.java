@@ -24,6 +24,7 @@ import kookmin.kuham.user.exception.UserNotExistException;
 import kookmin.kuham.user.repository.UserRepository;
 import kookmin.kuham.user.schema.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,9 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
     private final ProjectRepository projectRepository;
     private final ActivityRepository activityRepository;
+
+    @Value("${ngrok.path}")
+    private String Path;
 
     public Portfolio addPortfolio(RegisterInfoRequest registerInfoRequest){
         //입력 받은 정보를 토대로 포트폴리오 객체 생성
@@ -289,7 +293,7 @@ public class PortfolioService {
 
                 String fileName = i + "_" + file.getOriginalFilename();
                 file.transferTo(new File(uploadDir, fileName));
-                imageUrls.add("http://localhost:8080/project/" + projectId + "/" + fileName);
+                imageUrls.add(Path+"/"+path+"/" +userId+"/"+ projectId + "/" + fileName);
             }
 
            return imageUrls;

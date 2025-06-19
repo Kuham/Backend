@@ -94,8 +94,15 @@ public class PostService {
                             post.getDescription(),
                             post.getDomain(),
                             post.getCreatedAt(),
+                            post.getImages(),
                             post.getUser().getName(),
-                            post.getUser().getMajor()
+                            post.getUser().getMajor(),
+                            post.getRoles(),
+                            post.getPreferredCharacters(),
+                            post.getMaxMember(),
+                            post.getStartDate(),
+                            post.getEndDate(),
+                            post.getUser().getProfileUrl()
                     )).toList();
         } else {
             // 만약 userId가 넘어오지 않은 경우 모든 공고를 가져옴
@@ -107,12 +114,38 @@ public class PostService {
                             post.getDescription(),
                             post.getDomain(),
                             post.getCreatedAt(),
+                            post.getImages(),
                             post.getUser().getName(),
-                            post.getUser().getMajor()
+                            post.getUser().getMajor(),
+                            post.getRoles(),
+                            post.getPreferredCharacters(),
+                            post.getMaxMember(),
+                            post.getStartDate(),
+                            post.getEndDate(),
+                            post.getUser().getProfileUrl()
                     )).toList();
 
         }
 
+    }
+    public getPostsResponse getPostDetail(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        return new getPostsResponse(
+                post.getId(),
+                post.getTitle(),
+                post.getDescription(),
+                post.getDomain(),
+                post.getCreatedAt(),
+                post.getImages(),
+                post.getUser().getName(),
+                post.getUser().getMajor(),
+                post.getRoles(),
+                post.getPreferredCharacters(),
+                post.getMaxMember(),
+                post.getStartDate(),
+                post.getEndDate(),
+                post.getUser().getProfileUrl()
+        );
     }
 
 }

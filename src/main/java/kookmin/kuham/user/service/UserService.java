@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -40,7 +41,10 @@ public class UserService {
     private String googleClientSecret;
     @Value("${google.client.redirect-uri}")
     private String googleRedirectUri;
-    
+    @Value("${ngrok.path}")
+    private String ngrokPath;
+
+    @Transactional
     public RegisterSuccessResponse register(RegisterInfoRequest registerInfoRequest) {
         //새로운 유저 등록
         String uuid = UUID.randomUUID().toString();
@@ -59,7 +63,6 @@ public class UserService {
                 .build();
         userRepository.save(newUser);
 
-        //TODO: 회원 가입 성공시 jwt 생성
         return RegisterSuccessResponse.builder()
                 .uid(newUser.getId())
                 .email(newUser.getEmail())
@@ -139,7 +142,7 @@ public class UserService {
             //이미지 업로드
             String fileName = file.getOriginalFilename();
             file.transferTo(new File(uploadDir , fileName));
-            user.setProfileUrl("http://localhost:8080/profile/"+userId+"/"+fileName);
+            user.setProfileUrl(ngrokPath+"/profile/"+userId+"/"+fileName);
         }
 
 
@@ -160,4 +163,6 @@ public class UserService {
 
         return;
     }
+
+
 }

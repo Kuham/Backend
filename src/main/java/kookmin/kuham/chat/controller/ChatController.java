@@ -14,12 +14,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -32,9 +36,10 @@ public class ChatController {
 
     // 클라이언트에서 "/app/chat/message"로 메시지를 보내면 이 메서드가 호출됨
     @MessageMapping("chat/message")
-    public void sendMessage(ChatMessageRequest message) {
-        //Todo: jwt에서 실제 사용자 ID로 변경해야 함
-        String userId = "993e64e7-40b0-4c9d-afc0-5d34ced2a210";
+    public void sendMessage(ChatMessageRequest message, Principal principal) {
+
+        // 메시지를 보낸 사용자의 ID를 가져옴
+        String userId = principal.getName();
         // 메시지를 데이터베이스에 저장
         ChatRoom room = chatRepository.findById(message.getRoomId()).orElseThrow(RoomNotExistException::new);
         // 만약 해당 사용자가 채팅방에 포함되어 있지 않다면 예외 발생
@@ -55,8 +60,8 @@ public class ChatController {
 
     @Operation(summary = "메시지 읽음 처리")
     @PutMapping("chat/read")
-    public ResponseEntity<?> readMessage(@RequestBody ReadMessageRequest req) {
-        String userId = "userId"; // jwt에서 실제 사용자 ID로 변경해야 함
+    public ResponseEntity<?> readMessage(@RequestBody ReadMessageRequest req,@AuthenticationPrincipal String userId) {
+
         // 메시지 읽음 처리 로직
         ChatRoom room = chatRepository.findByRoomId(req.roomId());
         room.getMessages().stream().filter(message ->message.getMessageId().equals(req.messageId()))
@@ -71,18 +76,18 @@ public class ChatController {
 
     @Operation(summary = "채팅방 입장")
     @GetMapping("/chat/enter/{roomId}")
-    public ResponseEntity<?> enterChatRoom(@PathVariable("roomId") String roomId) {
+    public ResponseEntity<?> enterChatRoom(@PathVariable("roomId") String roomId,@AuthenticationPrincipal String userId) {
         // 채팅방 입장 처리 로직
         ChatRoom room = chatRepository.findById(roomId).orElseThrow(RoomNotExistException::new);
         //채팅방의 메세지 기록 가져오기
-        return ResponseEntity.ok(chatService.getChatContents(room));
+        return ResponseEntity.ok(chatService.getChatContents(room,userId));
     }
 
     @Operation(summary = "채팅방 목록")
     @GetMapping("/chat/lists")
-    public ResponseEntity<List<ChatListResponse>> getChatList() {
+    public ResponseEntity<List<ChatListResponse>> getChatList(@AuthenticationPrincipal String userId) {
         // 채팅방 목록 조회 처리 로직
-        return ResponseEntity.ok(chatService.getChats());
+        return ResponseEntity.ok(chatService.getChats(userId));
     }
 
 
